@@ -184,6 +184,12 @@ def generate_poem(models, num_lines, max_line_len):
 def reset_state():
     st.session_state.poem = None
 
+def check_for_models(models):
+    for m in models:
+        if m:
+            return True
+    return False
+
 st.set_page_config(
     page_title='Poetry Generator',
     page_icon=':scroll:',
@@ -209,10 +215,14 @@ if st.session_state.poem:
 if poet_selector:
     if poet_selector == 'Learn from my poems':
         user_poems = st.text_area('Upload poems to learn from')
-        # st.markdown(user_poems)
         poet_list = poem_to_list(user_poems, user_file=True)
         models = models_from_poet(poet_list)
-        st.button('Generate poem!', on_click=generate_poem, args=[models, num_lines, max_line_len])
+
+        if not check_for_models(models):
+            st.markdown('Make sure to hit command + enter in the textbox when ready.')
+        else:
+            st.button('Generate poem!', on_click=generate_poem, args=[models, num_lines, max_line_len])
+
     
     else:
         author2file = {
