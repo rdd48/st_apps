@@ -43,14 +43,7 @@ def poem_to_list(txt_file):
                 saved_lines.append(split_l)
     return saved_lines
 
-def generate_models(author):
-    author2file = {
-        'Shel Silverstein': 'shel_silverstein',
-        'Robert Frost': 'robert_frost',
-        'Edgar Allan Poe': 'edgar_allan_poe'
-    }
-
-    poet_list = poem_to_list(f'./poem_inputs/{author2file[author]}.txt')
+def generate_models(poet_list):
 
     # don't judge. i realized late that i needed int2word and word2int, so this was quicker than thinking
     word2int = {}
@@ -187,7 +180,18 @@ max_line_len = st.sidebar.slider('Maximum number of words per sentence', min_val
 
 if poet_selector:
     if poet_selector != 'Learn from my poems':
-        models = models_from_poet(poet_selector)
+        author2file = {
+            'Shel Silverstein': 'shel_silverstein',
+            'Robert Frost': 'robert_frost',
+            'Edgar Allan Poe': 'edgar_allan_poe'
+        }
 
-st.button('Generate poem!', on_click=generate_poem, args=[models, num_lines, max_line_len])
-
+        poet_list = poem_to_list(f'./poem_inputs/{author2file[poet_selector]}.txt')
+        models = models_from_poet(poet_list)
+        st.button('Generate poem!', on_click=generate_poem, args=[models, num_lines, max_line_len])
+        
+    else:
+        user_poems = st.text_area('Upload poems to learn from')
+        pass
+        # poet_list = poem_to_list()
+        # models = models_from_poet(poet_list)
