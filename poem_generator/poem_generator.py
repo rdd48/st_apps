@@ -214,7 +214,7 @@ if poet_selector:
             'Edgar Allan Poe': 'edgar_allan_poe'
         }
 
-        poet_list = poem_to_list(f'./poem_generator/poem_inputs/{author2file[poet_selector]}.txt')
+        poet_list = poem_to_list(f'./poem_generator/poem_inputs/{author2file[poet_selector]}.txt', user_file=False)
         # poet_list = poem_to_list(f'./poem_inputs/{author2file[poet_selector]}.txt', user_file=False)
         models = models_from_poet(poet_list)
         
