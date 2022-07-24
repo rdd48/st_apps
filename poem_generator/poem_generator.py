@@ -174,10 +174,6 @@ st.set_page_config(
     layout='wide'
 )
 
-st.markdown(os.listdir())
-st.markdown(os.listdir('/app/st_apps/poem_generator'))
-st.markdown(os.getcwd())
-
 st.sidebar.header('Select options:')
 poet_selector = st.sidebar.selectbox('Select poet:', ('Shel Silverstein', 'Edgar Allan Poe', 'Robert Frost', 'Learn from my poems'))
 num_lines = st.sidebar.slider('Number of lines', min_value=1, max_value=8, value=4, step=1)
