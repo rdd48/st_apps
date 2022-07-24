@@ -1,5 +1,6 @@
 import numpy as np
 import streamlit as st
+import os
 
 # punc = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
 characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -172,6 +173,9 @@ st.set_page_config(
     page_icon=':scroll:',
     layout='wide'
 )
+
+st.markdown(os.listdir())
+st.markdown(os.getcwd())
 
 st.sidebar.header('Select options:')
 poet_selector = st.sidebar.selectbox('Select poet:', ('Shel Silverstein', 'Edgar Allan Poe', 'Robert Frost', 'Learn from my poems'))
