@@ -207,23 +207,24 @@ if st.session_state.poem:
         st.markdown(line)
 
 if poet_selector:
-    if poet_selector != 'Learn from my poems':
+    if poet_selector == 'Learn from my poems':
+        user_poems = st.text_area('Upload poems to learn from')
+        # st.markdown(user_poems)
+        poet_list = poem_to_list(user_poems, user_file=True)
+        models = models_from_poet(poet_list)
+        st.button('Generate poem!', on_click=generate_poem, args=[models, num_lines, max_line_len])
+    
+    else:
         author2file = {
             'Shel Silverstein': 'shel_silverstein',
             'Robert Frost': 'robert_frost',
             'Edgar Allan Poe': 'edgar_allan_poe'
         }
 
-        poet_list = poem_to_list(f'./poem_generator/poem_inputs/{author2file[poet_selector]}.txt', user_file=False)
+        poet_list = poem_to_list(f'./poem_generator/poem_inputs/{author2file[poet_selector]}.txt')
         # poet_list = poem_to_list(f'./poem_inputs/{author2file[poet_selector]}.txt', user_file=False)
         models = models_from_poet(poet_list)
+        st.button('Generate poem!', on_click=generate_poem, args=[models, num_lines, max_line_len])
         
-    else: 
-        user_poems = st.text_area('Upload poems to learn from')
-        # st.markdown(user_poems)
-        poet_list = poem_to_list(user_poems, user_file=True)
-        models = models_from_poet(poet_list)
-    
-    st.button('Generate poem!', on_click=generate_poem, args=[models, num_lines, max_line_len])
 
 
