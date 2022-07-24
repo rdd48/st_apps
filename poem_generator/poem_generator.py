@@ -175,6 +175,7 @@ st.set_page_config(
 )
 
 st.markdown(os.listdir())
+st.markdown(os.listdir('/app/st_apps/poem_generator'))
 st.markdown(os.getcwd())
 
 st.sidebar.header('Select options:')
@@ -190,7 +191,7 @@ if poet_selector:
             'Edgar Allan Poe': 'edgar_allan_poe'
         }
 
-        poet_list = poem_to_list(f'./poem_inputs/{author2file[poet_selector]}.txt')
+        poet_list = poem_to_list(f'./poem_generator/poem_inputs/{author2file[poet_selector]}.txt')
         models = models_from_poet(poet_list)
         st.button('Generate poem!', on_click=generate_poem, args=[models, num_lines, max_line_len])
         
