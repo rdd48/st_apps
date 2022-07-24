@@ -50,7 +50,7 @@ def generate_models(author):
         'Edgar Allan Poe': 'edgar_allan_poe'
     }
 
-    poet_list = poem_to_list(f'poem_inputs/{author2file[author]}.txt')
+    poet_list = poem_to_list(f'./poem_inputs/{author2file[author]}.txt')
 
     # don't judge. i realized late that i needed int2word and word2int, so this was quicker than thinking
     word2int = {}
@@ -181,12 +181,13 @@ st.set_page_config(
 )
 
 st.sidebar.header('Select options:')
-poet_selector = st.sidebar.selectbox('Select poet:', ('Shel Silverstein', 'Edgar Allan Poe', 'Robert Frost'))
+poet_selector = st.sidebar.selectbox('Select poet:', ('Shel Silverstein', 'Edgar Allan Poe', 'Robert Frost', 'Learn from my poems'))
 num_lines = st.sidebar.slider('Number of lines', min_value=1, max_value=8, value=4, step=1)
 max_line_len = st.sidebar.slider('Maximum number of words per sentence', min_value=2, max_value=14, value=8, step=1)
 
 if poet_selector:
-    models = models_from_poet(poet_selector)
+    if poet_selector != 'Learn from my poems':
+        models = models_from_poet(poet_selector)
 
 st.button('Generate poem!', on_click=generate_poem, args=[models, num_lines, max_line_len])
 
