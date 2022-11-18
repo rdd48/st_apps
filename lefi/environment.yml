@@ -1,10 +1,10 @@
 name: st-lefi
 channels:
-- bioconda
+  - bioconda
 dependencies:
-- pip
-- blast
-- pip:
-  - streamlit==1.14.1
-  - plotly==5.11.0
-  - biopython==1.79
+  - pip
+  - blast
+  - pip:
+    - streamlit==1.14.1
+    - plotly==5.11.0
+    - biopython==1.79
