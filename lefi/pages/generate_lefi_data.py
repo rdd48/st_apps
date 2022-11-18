@@ -1,5 +1,5 @@
 import math
-# import subprocess
+import subprocess
 import pickle
 import io
 import streamlit as st
@@ -63,6 +63,9 @@ def fasta_to_dicts(fasta_file):
             subject=f.name,
             outfmt='6 qseqid qlen sseqid slen bitscore length pident'
             )
+        
+        st.markdown(cline_pblast)
+        st.markdown(subprocess.check_output('which blastp', shell=True))
         
         out = cline_pblast()
 
