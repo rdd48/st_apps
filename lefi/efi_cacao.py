@@ -1,57 +1,61 @@
+import sys
 import math
 import subprocess
 import pickle
-import streamlit as st
 
-st.set_page_config(
-    page_title='Local EFI',
-    page_icon=':atom_symbol:',
-    layout='wide'
-)
+fasta_file = sys.argv[1]
 
 global blast_path 
-blast_path = '/Users/robbydivine/opt/miniconda3/envs/lefi/bin/'
+blast_path = '/home/rddivine/miniconda3/envs/lefi/bin/'
 
 def process_fasta(fasta_file):
+    with open(fasta_file) as f:
 
-    fasta_dict = {}
+        fasta_dict = {}
 
-    lines = fasta_file.getvalue().decode('utf-8').split('\n')
+        lines = f.readlines()
+        for i in range(len(lines)):
+            if lines[i][0] == '>':
+                name = lines[i][1:]
+                seq = ''
+                new_index = i + 1
+                while lines[new_index][0] != '>':
+                    seq += lines[new_index]
+                    new_index += 1
+                    if new_index == len(lines):
+                        break
+                
+                name_only = name.split()[0]
+                if '[' in name:
+                    species = name.split('[')[-1].replace(']', '').strip()
+                else:
+                    species = ''
 
-    for i in range(len(lines)):
-        if lines[i][0] == '>':
-            name = lines[i][1:]
-            seq = ''
-            new_index = i + 1
-            while lines[new_index][0] != '>':
-                seq += lines[new_index]
-                new_index += 1
-                if new_index == len(lines):
-                    break
-            
-            name_only = name.split()[0]
-            if '[' in name:
-                species = name.split('[')[-1].replace(']', '').strip()
-            else:
-                species = ''
+                if len(name.split()) > 1:
+                    descript = ' '.join(name.split()[1:])
+                    descript = descript.replace(f'[{species}]', '').strip()
+                else:
+                    descript = ''
 
-            if len(name.split()) > 1:
-                descript = ' '.join(name.split()[1:])
-                descript = descript.replace(f'[{species}]', '').strip()
-            else:
-                descript = ''
-
-            fasta_dict[name_only] = (seq.replace('\n', ''), species, descript)
-
+                fasta_dict[name_only] = (seq.replace('\n', ''), species, descript)
+    
     return fasta_dict
 
-def fasta_to_dicts(network_name):
+# def calc_bitscore(raw_align_score, l, k):
+#     # S = (λ × S' − lnK)/ ln2
+#     # lambda, K = 0.3176, 0.134
+#     # lambda, K = 0.297, 0.082
+#     return ((l * raw_align_score) - math.log(k)) / math.log(2)
+
+def fasta_to_dicts(input_fasta):
 
     # keep info for xgmml
     nodes, edges = {}, {}
 
-    # subprocess.run(f'{blast_path}makeblastdb -in {network_name} -dbtype prot'.split())
-    out = subprocess.check_output(f"{blast_path}blastp -query {network_name} -subject {network_name} -matrix BLOSUM62 -outfmt '6 qseqid qlen sseqid slen bitscore length pident'", shell=True)
+    fasta_dict = process_fasta(input_fasta)
+
+    # subprocess.run(f'{blast_path}makeblastdb -in {input_fasta} -dbtype prot'.split())
+    out = subprocess.check_output(f"{blast_path}blastp -query {input_fasta} -subject {input_fasta} -matrix BLOSUM62 -outfmt '6 qseqid qlen sseqid slen bitscore length pident'", shell=True)
 
     for line in out.decode('utf-8').split('\n'):
         if line:
@@ -69,13 +73,7 @@ def fasta_to_dicts(network_name):
 
                 # https://github.com/EnzymeFunctionInitiative/EFITools/blob/master/lib/EFI/Util/AlignmentScore.pm
                 # is formula from ^ actually?:
-                align_score = -(math.log(l1 * l2) / math.log(10)) + (bitscore * math.log(2) / math.log(10)) # log must be ln
-
-                # in perl:
-                #    -(log($qlen * $slen) / log(10))
-                #         +
-                #     $bitscore * log(2) / log(10)
-                # );
+                align_score = -(math.log(float(l1) * float(l2)) / math.log(10)) + (float(bitscore) * math.log(2) / math.log(10)) # log must be ln
 
                 # check for case where bitscore is so high that 2 ** -bitscore evaluates to 0.0
                 # if (2 ** (-float(bitscore))):
@@ -83,13 +81,10 @@ def fasta_to_dicts(network_name):
                 # else:
                 #     align_score = -math.log10((2. ** (-float(1000.))) * float(l1) * float(l2))
                 
-                
                 # edges dict structure = (name 1, name 2): (percent id, align_score, align_len)
                 if (n1, n2) and (n2, n1) not in edges:
                     edges[(n1, n2)] = (pident, align_score, align_len)
-                
 
-    
     return nodes, edges
 
 def dataset_analysis(nodes, edges):
@@ -188,20 +183,11 @@ def write_xgmml(network_name, nodes, edges, score_cutoff):
         
         fout.write('</graph>')
 
-st.markdown('WIP: generate .pickle files on streamlit.')
-st.markdown('Current status: use ')
 
-# fasta_file = st.file_uploader('Upload the .fasta output from the initial dataset generation.')
-
-# if fasta_file is not None:
-
-#     fasta_dict = process_fasta(fasta_file)
-    
-#     network_name_full = fasta_file.name.strip()
-#     network_name_short = fasta_file.name.split('/')[-1].split('.fasta')[0].strip()
-
-#     nodes, edges = fasta_to_dicts(network_name_full)
-#     num_seqs, score_by_len, score_by_id, score_by_edge = dataset_analysis(nodes, edges)
+if __name__ == '__main__':
+    nodes, edges = fasta_to_dicts(fasta_file)
+    network_name = fasta_file.split('/')[-1].split('.fasta')[0].strip()
+    num_seqs, score_by_len, score_by_id, score_by_edge = dataset_analysis(nodes, edges)
 
     # write_xgmml(network_name, nodes, edges, score_cutoff=90)
-    # write_all_dicts(network_name, nodes, edges, num_seqs, score_by_len, score_by_id, score_by_edge)
+    write_all_dicts(network_name, nodes, edges, num_seqs, score_by_len, score_by_id, score_by_edge)
