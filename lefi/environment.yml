@@ -1,5 +1,6 @@
 name: lefi
 channels:
+  - conda-forge
   - bioconda
   - defaults
 dependencies:
