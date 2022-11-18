@@ -189,7 +189,7 @@ def write_xgmml(network_name, nodes, edges, score_cutoff):
         fout.write('</graph>')
 
 st.markdown('WIP: generate .pickle files on streamlit.')
-st.markdown('Current status: use ')
+st.markdown('Current status: use https://github.com/rdd48/st_apps/blob/main/lefi/efi_cacao.py but update the blast_path on line 9')
 
 # fasta_file = st.file_uploader('Upload the .fasta output from the initial dataset generation.')
 
