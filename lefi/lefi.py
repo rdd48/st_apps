@@ -1,8 +1,9 @@
 import sys
 import math
-import subprocess
+# import subprocess
 import pickle
-from Bio import Align
+from Bio.Blast.Applications import NcbiblastpCommandline
+
 
 fasta_file = sys.argv[1]
 
@@ -56,9 +57,18 @@ def fasta_to_dicts(input_fasta):
     fasta_dict = process_fasta(input_fasta)
 
     # subprocess.run(f'{blast_path}makeblastdb -in {input_fasta} -dbtype prot'.split())
-    out = subprocess.check_output(f"{blast_path}blastp -query {input_fasta} -subject {input_fasta} -matrix BLOSUM62 -outfmt '6 qseqid qlen sseqid slen bitscore length pident'", shell=True)
+    # out = subprocess.check_output(f"{blast_path}blastp -query {input_fasta} -subject {input_fasta} -matrix BLOSUM62 -outfmt '6 qseqid qlen sseqid slen bitscore length pident'", shell=True)
 
-    for line in out.decode('utf-8').split('\n'):
+    cline_pblast = NcbiblastpCommandline(
+        query='cdhit_out.fasta', 
+        subject='cdhit_out.fasta',
+        outfmt='6 qseqid qlen sseqid slen bitscore length pident'
+        )
+    
+    out = cline_pblast()
+    
+    for line in out[0].split('\n'):
+        # for line in cline_pblast.split('\n'):
         if line:
             n1, l1, n2, l2, bitscore, align_len, pident = line.split('\t')
 
