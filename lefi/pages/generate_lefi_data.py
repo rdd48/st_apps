@@ -12,9 +12,6 @@ st.set_page_config(
     layout='wide'
 )
 
-global blast_path 
-blast_path = '/Users/robbydivine/opt/miniconda3/envs/lefi/bin/'
-
 def process_fasta(fasta_file):
 
     fasta_dict = {}
@@ -63,9 +60,6 @@ def fasta_to_dicts(fasta_file):
             subject=f.name,
             outfmt='6 qseqid qlen sseqid slen bitscore length pident'
             )
-        
-        st.markdown(cline_pblast)
-        st.markdown(subprocess.check_output('which blastp', shell=True))
         
         out = cline_pblast()
 
