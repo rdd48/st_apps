@@ -2,7 +2,7 @@ name: lefi_test
 channels:
   - biocore
 dependencies:
-  - python==3.10
+  - python>=3.9
   - blast-plus
   - pip
   - pip:
