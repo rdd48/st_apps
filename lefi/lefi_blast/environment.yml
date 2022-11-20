@@ -1,0 +1,11 @@
+name: lefi_test
+channels:
+  - bioconda
+dependencies:
+  - python==3.10
+  - blast
+  - pip
+  - pip:
+    - biopython
+    - plotly
+    - streamlit
