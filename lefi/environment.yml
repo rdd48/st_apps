@@ -1,0 +1,12 @@
+name: lefi_test
+channels:
+  - defaults
+  - biocore
+dependencies:
+  - python>=3.9
+  - blast-plus
+  - pip
+  - pip:
+    - biopython
+    - plotly
+    - streamlit
