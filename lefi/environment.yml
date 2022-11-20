@@ -1,8 +1,10 @@
 name: lefi_test
 channels:
+  - bioconda
   - biocore
 dependencies:
   - python>=3.9
+  - blast
   - blast-plus
   - pip
   - pip:
