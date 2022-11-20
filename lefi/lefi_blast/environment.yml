@@ -1,4 +1,4 @@
-name: lefi_test
+name: lefi_blast
 channels:
   - bioconda
 dependencies:
