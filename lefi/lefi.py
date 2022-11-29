@@ -27,6 +27,7 @@ def process_fasta(fasta_file):
                     if new_index == len(lines):
                         break
                 
+            if ' ' in name:
                 name_only = name.split()[0]
                 if '[' in name:
                     species = name.split('[')[-1].replace(']', '').strip()
@@ -40,9 +41,13 @@ def process_fasta(fasta_file):
                     descript = ''
 
                 fasta_dict[name_only] = (seq.replace('\n', ''), species, descript)
+
+            else:
+                fasta_dict[name.strip()] = (seq.replace('\n', ''), '', '')
+
     
     return fasta_dict
-
+    
 # def calc_bitscore(raw_align_score, l, k):
 #     # S = (λ × S' − lnK)/ ln2
 #     # lambda, K = 0.3176, 0.134

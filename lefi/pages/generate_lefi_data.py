@@ -29,19 +29,23 @@ def process_fasta(fasta_file):
                 if new_index == len(lines):
                     break
             
-            name_only = name.split()[0]
-            if '[' in name:
-                species = name.split('[')[-1].replace(']', '').strip()
-            else:
-                species = ''
+            if ' ' in name:
+                name_only = name.split()[0]
+                if '[' in name:
+                    species = name.split('[')[-1].replace(']', '').strip()
+                else:
+                    species = ''
 
-            if len(name.split()) > 1:
-                descript = ' '.join(name.split()[1:])
-                descript = descript.replace(f'[{species}]', '').strip()
-            else:
-                descript = ''
+                if len(name.split()) > 1:
+                    descript = ' '.join(name.split()[1:])
+                    descript = descript.replace(f'[{species}]', '').strip()
+                else:
+                    descript = ''
 
-            fasta_dict[name_only] = (seq.replace('\n', ''), species, descript)
+                fasta_dict[name_only] = (seq.replace('\n', ''), species, descript)
+
+            else:
+                fasta_dict[name.strip()] = (seq.replace('\n', ''), '', '')
 
     return fasta_dict
 

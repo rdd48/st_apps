@@ -24,7 +24,8 @@ def process_fasta(fasta_file):
                     new_index += 1
                     if new_index == len(lines):
                         break
-                
+                    
+            if ' ' in name:
                 name_only = name.split()[0]
                 if '[' in name:
                     species = name.split('[')[-1].replace(']', '').strip()
@@ -38,6 +39,9 @@ def process_fasta(fasta_file):
                     descript = ''
 
                 fasta_dict[name_only] = (seq.replace('\n', ''), species, descript)
+
+            else:
+                fasta_dict[name.strip()] = (seq.replace('\n', ''), '', '')
     
     return fasta_dict
 
