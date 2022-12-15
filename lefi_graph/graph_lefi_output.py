@@ -18,7 +18,7 @@ def resize_by_num_boxes(d, box_nums):
     if box_size == 1:
         return d
 
-    resized_d = {(k // box_size) * box_size: 0 for k in range(0, max_xaxis, box_size)}
+    resized_d = {(k // box_size) * box_size: 0 for k in range(0, max_xaxis + box_size, box_size)}
 
     for k, v in d.items():
         resized_d[(k // box_size) * box_size] += v
@@ -34,7 +34,7 @@ def resize_by_num_boxes_boxplot(d, box_nums):
     if box_size == 1:
         return d
 
-    resized_d = {(k // box_size) * box_size: [] for k in range(0, max_xaxis, box_size)}
+    resized_d = {(k // box_size) * box_size: [] for k in range(0, max_xaxis + box_size, box_size)}
 
     for k, v in d.items():
         new_k = (k // box_size) * box_size
