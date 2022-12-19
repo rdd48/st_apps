@@ -75,5 +75,3 @@ if uploaded_csvs:
     # remove_button = st.sidebar.button('Remove all', on_click=set_no_y_options)
 
     st.plotly_chart(line_chart)
-
-
