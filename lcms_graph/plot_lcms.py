@@ -68,8 +68,11 @@ if uploaded_csvs:
     line_chart = px.line(
         df,
         x='x',
-        y=y_options
+        y=y_options,
     )
+
+    line_chart.update_layout(width=50)
+    line_chart.update_layout(autosize=True)
 
     # all_button = st.sidebar.button('Select all', on_click=set_all_y_options, args=(df.columns.to_list()[1:]))
     # remove_button = st.sidebar.button('Remove all', on_click=set_no_y_options)
