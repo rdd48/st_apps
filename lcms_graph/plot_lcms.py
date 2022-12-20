@@ -71,7 +71,7 @@ if uploaded_csvs:
         y=y_options,
     )
 
-    line_chart.update_layout(width=500)
+    line_chart.update_layout(width=1000)
     #line_chart.update_layout(autosize=True)
 
     # all_button = st.sidebar.button('Select all', on_click=set_all_y_options, args=(df.columns.to_list()[1:]))
