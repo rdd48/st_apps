@@ -10,7 +10,7 @@ st.set_page_config(
 )
 
 def resize_by_num_boxes(d, box_nums):
-    max_xaxis = max(d.keys())
+    max_xaxis = int(max(d.keys()))
     if box_nums >= max_xaxis:
         return d
 
@@ -18,7 +18,8 @@ def resize_by_num_boxes(d, box_nums):
     if box_size == 1:
         return d
 
-    resized_d = {(k // box_size) * box_size: 0 for k in range(0, max_xaxis, box_size)}
+    resized_d = {(k // box_size) * box_size: 0 for k in range(0, max_xaxis + box_size, box_size)}
+    # resized_d[max_xaxis] = 0
 
     for k, v in d.items():
         resized_d[(k // box_size) * box_size] += v
@@ -26,7 +27,7 @@ def resize_by_num_boxes(d, box_nums):
     return resized_d
 
 def resize_by_num_boxes_boxplot(d, box_nums):
-    max_xaxis = max(d.keys())
+    max_xaxis = int(max(d.keys()))
     if box_nums >= max_xaxis:
         return d
 
@@ -34,7 +35,8 @@ def resize_by_num_boxes_boxplot(d, box_nums):
     if box_size == 1:
         return d
 
-    resized_d = {(k // box_size) * box_size: [] for k in range(0, max_xaxis, box_size)}
+    resized_d = {(k // box_size) * box_size: [] for k in range(0, max_xaxis + box_size, box_size)}
+    # resized_d[max_xaxis] = []
 
     for k, v in d.items():
         new_k = (k // box_size) * box_size
@@ -84,6 +86,9 @@ uploaded_pickle = st.file_uploader('Upload the .pickle output from the initial d
 
 if uploaded_pickle is not None:
     data = pickle.load(uploaded_pickle)
+
+    for k,v in data['score_by_len'].items():
+        print(k)
 
     sorted_scores = sorted(data['score_by_len'].keys())
     score_cutoff = st.slider(
