@@ -10,14 +10,14 @@ st.set_page_config(
 )
 
 def resize_by_num_boxes(d, box_nums):
-    max_xaxis = max(d.keys())
+    max_xaxis = int(max(d.keys()))
     if box_nums >= max_xaxis:
         return d
 
     box_size = max_xaxis // box_nums
     if box_size == 1:
         return d
-
+    
     resized_d = {(k // box_size) * box_size: 0 for k in range(0, max_xaxis + box_size, box_size)}
 
     for k, v in d.items():
@@ -26,14 +26,14 @@ def resize_by_num_boxes(d, box_nums):
     return resized_d
 
 def resize_by_num_boxes_boxplot(d, box_nums):
-    max_xaxis = max(d.keys())
+    max_xaxis = int(max(d.keys()))
     if box_nums >= max_xaxis:
         return d
 
     box_size = max_xaxis // box_nums
     if box_size == 1:
         return d
-
+    
     resized_d = {(k // box_size) * box_size: [] for k in range(0, max_xaxis + box_size, box_size)}
 
     for k, v in d.items():
