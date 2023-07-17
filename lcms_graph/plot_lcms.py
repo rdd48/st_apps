@@ -62,7 +62,7 @@ if uploaded_csvs:
     y_options = st.sidebar.multiselect(
         'Select the data to plot:',
         options = df.columns.to_list()[1:],
-        default = df.columns.to_list()[1]
+        default = df.columns.to_list()[1:]
     )
 
     line_chart = px.line(
